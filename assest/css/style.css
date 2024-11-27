@@ -75,6 +75,10 @@ button.add-to-cart:hover {
     overflow: hidden;
     
 }
+.custom-bar{
+    width: 10px;
+    height: 10px;
+}
 /* lux section start */
 img.img-3{
     height: 177px;
@@ -96,6 +100,13 @@ img.img-3{
     font-weight: 300;
     line-height: 35px;
 }
+.card-img-top:hover{
+    opacity: 0.5;
+   
+}
+.office-img img:hover{
+    opacity: 0.5;
+}
 /* footer section start */
 section.footer{
     background-color: black;
@@ -115,4 +126,5 @@ section.footer{
 }
 .footer-content p:hover{
     color: goldenrod;
+    font-size: large;
 }
