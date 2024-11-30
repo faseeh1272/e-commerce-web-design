@@ -102,7 +102,7 @@ img.img-3{
 }
 .card-img-top:hover{
     opacity: 0.5;
-   
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 .office-img img:hover{
     opacity: 0.5;
