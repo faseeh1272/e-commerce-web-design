@@ -78,13 +78,40 @@
 <body>
   
 <div class="container">
-  <form class="form" action="">
+  <form class="form" action="" onsubmit="return handlelogin(event)">
     <p class="title">Login Form</p>
-    <input placeholder="Username" class="username input" type="text" />
-    <input placeholder="Password" class="password input" type="password" />
-    <button class="btn" type="submit">Login</button>
+    <input placeholder="Username" class="username input" id="loginemail" type="text" />
+    <input placeholder="Password" class="password input" id="loginpassword" type="password" />
+    <button class="btn" onclick="login()">Login</button>
+    <p>Dont Have an acoount? <a href="./signup.html">Sign Up</a></p>
   </form>
+ 
 </div>
+<script>
+    function login() {
+    event.preventDefault(); // Prevent form from refreshing the page
 
+    // Get input values
+    const email = document.getElementById("loginemail").value.trim();
+    const password = document.getElementById("loginpassword").value.trim();
+
+    // Basic validation
+    if (!email || !password) {
+      alert("Please fill in both fields.");
+      return false;
+    }
+
+    // Simulate login success
+    if (email === "user@example.com" && password === "password123") {
+      alert("Login successful!");
+      // Redirect to the home page
+      window.location.href = "index.html";
+    } else {
+      alert("Invalid email or password.");
+    }
+
+    return false;
+  }
+</script>
 </body>
 </html>
