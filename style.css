@@ -48,7 +48,7 @@
   }
   
   form button {
-    background-color: #0056b3;
+    background-color: #00b300;
     color: #fff;
     border: none;
     cursor: pointer;
@@ -95,7 +95,7 @@
   .tabs button {
     padding: 10px 20px;
     border: none;
-    background-color: #0056b3;
+    background-color: #00b30f;
     color: white;
     cursor: pointer;
     border-radius: 4px;
