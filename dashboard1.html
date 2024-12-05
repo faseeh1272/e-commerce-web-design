@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <h2>Welcome to the Dashboard</h2>
+    <div class="tabs">
+      <button class="tab-button active" onclick="showTab('profile')">Profile</button>
+      <button class="tab-button" onclick="showTab('users')">Users</button>
+      <button class="logout-button" onclick="logout()">Logout</button>
+    </div>
+
+    <div id="profile" class="tab-content active">
+      <h3>Your Profile</h3>
+      <div id="profileInfo"></div>
+    </div>
+
+    <div id="users" class="tab-content">
+      <h3>Users</h3>
+      <div id="usersTableContainer"></div>
+    </div>
+  </div>
+
+  <script>
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    
+    // Function to display the user's profile information
+    function displayProfile() {
+      const profileInfo = document.getElementById("profileInfo");
+      profileInfo.innerHTML = `
+        <p><strong>First Name:</strong> ${loggedInUser.firstName}</p>
+        <p><strong>Last Name:</strong> ${loggedInUser.lastName}</p>
+        <p><strong>Email:</strong> ${loggedInUser.email}</p>
+        <p><strong>Role:</strong> ${loggedInUser.role}</p>
+      `;
+    }
+
+    // Function to display users based on role
+    function displayUsers() {
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+      const usersTableContainer = document.getElementById("usersTableContainer");
+
+      if (loggedInUser.role === "Super Admin") {
+        usersTableContainer.innerHTML = createUsersTable(users);
+      } else if (loggedInUser.role === "Admin") {
+        const filteredUsers = users.filter(user => user.role === "Employ");
+        usersTableContainer.innerHTML = createUsersTable(filteredUsers);
+      } else {
+        usersTableContainer.innerHTML = "<p>You do not have permission to view users.</p>";
+      }
+    }
+
+    // Function to create a users table
+    function createUsersTable(users) {
+      let tableHTML = `
+        <table>
+          <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+      `;
+
+      users.forEach(user => {
+        tableHTML += `
+          <tr>
+            <td>${user.id}</td>
+            <td>${user.firstName}</td>
+            <td>${user.lastName}</td>
+            <td>${user.email}</td>
+            <td>${user.role}</td>
+            <td>
+              <button onclick="editUser(${user.id})">Edit</button>
+              <button onclick="deleteUser(${user.id})">Delete</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      tableHTML += `</table>`;
+      return tableHTML;
+    }
+
+    // Function to show the selected tab
+    function showTab(tabName) {
+      const tabs = document.querySelectorAll('.tab-content');
+      tabs.forEach(tab => {
+        tab.classList.remove('active');
+      });
+
+      document.getElementById(tabName).classList.add('active');
+
+      // Activate the clicked tab button
+      const tabButtons = document.querySelectorAll('.tab-button');
+      tabButtons.forEach(button => {
+        button.classList.remove('active');
+      });
+
+      const clickedButton = Array.from(tabButtons).find(button => button.textContent.toLowerCase() === tabName.toLowerCase());
+      if (clickedButton) {
+        clickedButton.classList.add('active');
+      }
+
+      // Load users when the users tab is clicked
+      if (tabName === 'users') {
+        displayUsers();
+      }
+    }
+
+    // Function to edit user
+    function editUser(id) {
+      const users = JSON.parse(localStorage.getItem("users"));
+      const user = users.find(u => u.id === id);
+      if (user) {
+        const firstName = prompt("Edit First Name:", user.firstName);
+        const lastName = prompt("Edit Last Name:", user.lastName);
+        const email = prompt("Edit Email:", user.email);
+        const password = prompt("Edit Password:", user.password);
+        const role = prompt("Edit Role:", user.role);
+
+        if (firstName && lastName && email && password && role) {
+          user.firstName = firstName;
+          user.lastName = lastName;
+          user.email = email;
+          user.password = password;
+          user.role = role;
+
+          localStorage.setItem("users", JSON.stringify(users));
+          alert("User updated successfully!");
+          displayUsers();
+        }
+      }
+    }
+
+    // Function to delete user
+    function deleteUser(id) {
+      const users = JSON.parse(localStorage.getItem("users"));
+      const filteredUsers = users.filter(u => u.id !== id);
+      localStorage.setItem("users", JSON.stringify(filteredUsers));
+      alert("User deleted successfully!");
+      displayUsers();
+    }
+
+    // Function to logout
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      window.location.href = "login.html";
+    }
+
+    // Load profile information on page load
+    window.onload = function() {
+      displayProfile();
+      displayUsers();
+    };
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f4f6;
+      margin: 0;
+      padding: 0;
+    }
+
+    .dashboard-container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .tabs {
+      display: flex;
+      margin-bottom: 20px;
+    }
+
+    .tab-button {
+      flex: 1;
+      padding: 10px;
+      background-color: #f1f1f1;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .tab-button.active {
+      background-color: #0056b3;
+      color: #fff;
+      border: 1px solid #0056b3;
+    }
+
+    .tab-button:hover {
+      background-color: #e7e7e7;
+    }
+
+    .logout-button {
+      margin-left: auto;
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    button {
+      padding: 5px 10px;
+      margin: 5px;
+      border: none;
+      border-radius: 4px;
+      background-color: #0056b3;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #004494;
+    }
+  </style>
+</body>
+</html>

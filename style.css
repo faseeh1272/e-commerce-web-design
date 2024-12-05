@@ -1,0 +1,144 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f3f4f6;
+    background-image: url('./1000_F_232925587_st4gM8b3TJHtjjddCIUNyVyFJmZqMmn4.jpg');
+  }
+  body, a{
+    text-decoration: none;
+    color: white;
+  }
+  
+  .form-container {
+    background-color: #f31b1b;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+  }
+  
+  h2 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  form input, form select, form button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+  }
+  
+  form input:focus, form select:focus {
+    border-color: #0056b3;
+    outline: none;
+  }
+  
+  form button {
+    background-color: #0056b3;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  form button:hover {
+    background-color: #004494;
+  }
+  
+  p {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  
+  p a {
+    color: #0056b3;
+    text-decoration: none;
+  }
+  
+  p a:hover {
+    text-decoration: underline;
+  }
+  .dashboard-container {
+    max-width: 800px;
+    margin: 40px auto;
+    background-color: #ca0f0f;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    text-align: center;
+    color: #faeeee;
+  }
+  
+  .tabs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .tabs button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #0056b3;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .tabs button:hover {
+    background-color: #004494;
+  }
+  
+  .tab-content {
+    display: none;
+  }
+  
+  .tab-content h2 {
+    color: #fdeaea;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  table, th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  table th {
+    background-color: #f3f4f6;
+  }
+  
+  table td button {
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  table td button:hover {
+    background-color: #004494;
+  }
+  

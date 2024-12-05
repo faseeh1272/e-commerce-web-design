@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <h1>Welcome to Dashboard</h1>
+    <div class="tabs">
+      <button onclick="showTab('profile')" id="profileTab"><a href="./home.html">Profile</a></button>
+      <button onclick="showTab('users')" id="usersTab">Users</button>
+      <button onclick="logout()">Logout</button>
+    </div>
+    <div class="content">
+      <div id="profile" class="tab-content">
+        <h2>Profile</h2>
+        <p><strong>First Name:</strong> <span id="profileFirstName"></span></p>
+        <p><strong>Last Name:</strong> <span id="profileLastName"></span></p>
+        <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+        <p><strong>Role:</strong> <span id="profileRole"></span></p>
+      </div>
+      <div id="users" class="tab-content">
+        <h2>Users</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+      if (!loggedInUser) {
+        alert("You need to log in first!");
+        window.location.href = "login.html";
+        return;
+      }
+
+      document.getElementById("profileFirstName").textContent = loggedInUser.firstName;
+      document.getElementById("profileLastName").textContent = loggedInUser.lastName;
+      document.getElementById("profileEmail").textContent = loggedInUser.email;
+      document.getElementById("profileRole").textContent = loggedInUser.role;
+
+      if (loggedInUser.role === "Employ") {
+        document.getElementById("usersTab").style.display = "none";
+      } else {
+        loadUsersTable(loggedInUser.role);
+      }
+    });
+
+    function showTab(tabName) {
+      document.querySelectorAll(".tab-content").forEach(tab => tab.style.display = "none");
+      document.getElementById(tabName).style.display = "block";
+    }
+
+    function loadUsersTable(role) {
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+      const usersTableBody = document.getElementById("usersTableBody");
+      usersTableBody.innerHTML = "";
+
+      users.forEach(user => {
+        if (role === "Super Admin" || (role === "Admin" && user.role === "Employ")) {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${user.firstName}</td>
+            <td>${user.lastName}</td>
+            <td>${user.email}</td>
+            <td>${user.role}</td>
+            <td>
+              <button onclick="editUser(${user.id})">Edit</button>
+              <button onclick="deleteUser(${user.id})">Delete</button>
+            </td>
+          `;
+          usersTableBody.appendChild(row);
+        }
+      });
+    }
+
+    function editUser(userId) {
+      const users = JSON.parse(localStorage.getItem("users"));
+      const user = users.find(u => u.id === userId);
+      if (user) {
+        const newFirstName = prompt("Edit First Name:", user.firstName);
+        const newLastName = prompt("Edit Last Name:", user.lastName);
+        const newEmail = prompt("Edit Email:", user.email);
+
+        if (newFirstName && newLastName && newEmail) {
+          user.firstName = newFirstName;
+          user.lastName = newLastName;
+          user.email = newEmail;
+          localStorage.setItem("users", JSON.stringify(users));
+          loadUsersTable(JSON.parse(localStorage.getItem("loggedInUser")).role);
+          alert("User updated successfully!");
+        }
+      }
+    }
+
+    function deleteUser(userId) {
+      let users = JSON.parse(localStorage.getItem("users"));
+      users = users.filter(user => user.id !== userId);
+      localStorage.setItem("users", JSON.stringify(users));
+      loadUsersTable(JSON.parse(localStorage.getItem("loggedInUser")).role);
+      alert("User deleted successfully!");
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      window.location.href = "login.html";
+    }
+
+    showTab('profile');
+  </script>
+</body>
+</html>
